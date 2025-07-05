@@ -1,0 +1,49 @@
+﻿@model PruebaTecnica.Models.Usuario
+
+@{
+    ViewBag.Title = Model != null && Model.Id > 0 ? "Editar Usuario" : "Nuevo Usuario";
+    string accion = Model != null && Model.Id > 0 ? "EditarUsuario" : "Agregar";
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="mensaje-incorrecto" style="color: red; margin-bottom: 15px;">
+        @TempData["Mensaje"]
+    </div>
+}
+
+<div class="contenedor">
+    @using (Html.BeginForm(accion, "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        if (Model != null && Model.Id > 0)
+        {
+            @Html.HiddenFor(m => m.Id)
+        }
+
+        <div class="formulario">
+            <h1>@ViewBag.Title</h1>
+
+            <label for="NombreUsuario">Nombre de usuario</label>
+            @Html.TextBoxFor(m => m.NombreUsuario, new { @id = "NombreUsuario", required = "required" })
+
+            <label for="Nombre">Nombre</label>
+            @Html.TextBoxFor(m => m.Nombre, new { @id = "Nombre", required = "required" })
+
+            <label for="Apellidos">Apellidos</label>
+            @Html.TextBoxFor(m => m.Apellidos, new { @id = "Apellidos", required = "required" })
+
+            <label for="Correo">Email</label>
+            @Html.TextBoxFor(m => m.Email, new { @id = "Correo", type = "email", required = "required" })
+
+            <br />
+            <button type="submit" class="btn-guardar">
+                @(Model != null && Model.Id > 0 ? "Guardar Cambios" : "Guardar Usuario")
+            </button>
+        </div>
+    }
+    @section Scripts {
+        <script src="~/Scripts/Validaciones.js"></script>
+    }
+</div>

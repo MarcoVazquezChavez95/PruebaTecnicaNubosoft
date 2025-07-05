@@ -1,0 +1,55 @@
+﻿@model IEnumerable<PruebaTecnica.Models.Usuario>
+@{
+    ViewBag.Title = "Lista usuarios";
+}
+@if (TempData["Mensaje"] != null)
+{
+    <div class="mensaje-correcto">
+        @TempData["Mensaje"]
+    </div>
+}
+
+<h1>Usuarios Registrados</h1>
+<a href="@Url.Action("NuevoUsuario", "Home")" class="btn-agregar">Agregar Usuario</a>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre usuario</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Email</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null || !Model.Any())
+        {
+            <tr>
+                <td colspan="7" style="text-align:center;">Sin registros</td>
+            </tr>
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.NombreUsuario</td>
+                <td>@item.Nombre</td>
+                <td>@item.Apellidos</td>
+                <td>@item.Email</td>
+                <td>
+                    @Html.ActionLink("Editar", "EditarUsuario", new { id = item.Id }, new { @class = "btn-editar" })
+                </td>
+                <td>
+                    @using (Html.BeginForm("ConfirmarEliminacion", "Home", FormMethod.Post, new { onsubmit = "return confirm('¿Estás seguro que deseas eliminar este usuario?');" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("id", item.Id)
+                        <button type="submit" class="btn-eliminar">Eliminar</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
